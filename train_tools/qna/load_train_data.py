@@ -6,7 +6,6 @@ import os
 
 # ../../config/GlobalParams
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))) 
-
 from config.GlobalParams import * # Global Params 내부에 지정된 값 가져온다
 
 # 기존 학습 데이터 초기화

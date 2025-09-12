@@ -17,6 +17,9 @@ pip install JPype1==1.4.1 konlpy==0.6.0
 - 텐서플로우 페키지
 pip install tensorflow
 
+- 판다스 설치
+pip install pandas
+
 - 사이킷런 설치
 pip install scikit-learn
 
