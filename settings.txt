@@ -1,0 +1,28 @@
+- C 디렉토리에 직접 가상환경 설정
+conda create --prefix C:/conda_envs/chatbot_ex python=3.7
+
+- 가상환경 활성화
+conda activate C:/conda_envs/chatbot_ex
+
+- postgresql 패키지
+pip install psycopg2
+
+- 엑셀 패키티
+pip install openpyxl
+
+- 한글 패키지
+conda install -c conda-forge openjdk=8
+pip install JPype1==1.4.1 konlpy==0.6.0
+
+- 텐서플로우 페키지
+pip install tensorflow
+
+- 사이킷런 설치
+pip install scikit-learn
+
+- seqeval 설치
+pip install seqeval
+
+- fast api 필요 패키지
+pip install uvicorn
+pip install fastapi
