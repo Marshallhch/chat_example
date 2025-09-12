@@ -76,16 +76,39 @@ embedding_layer = Embedding(VOCAB_SIZE, EMB_SIZE, input_length=15)(input_layer)
 dropout_emb = Dropout(rate=dropout_prob)(embedding_layer)
 
 # 합성곱층 추가 및 통합 
-conv1 = Conv1D()(dropout_emb)
+conv1 = Conv1D(filters=128, kernel_size=3, padding='valid', activation='relu')(dropout_emb)
 pool1 = GlobalMaxPooling1D()(conv1)
 
-conv2 = Conv1D()(dropout_emb)
+conv2 = Conv1D(filters=128, kernel_size=3, padding='valid', activation='relu')(dropout_emb)
 pool2 = GlobalMaxPooling1D()(conv2)
 
-conv3 = Conv1D()(dropout_emb)
+conv3 = Conv1D(filters=128, kernel_size=3, padding='valid', activation='relu')(dropout_emb)
 pool3 = GlobalMaxPooling1D()(conv3)
 
 # 통합
 concat = concatenate([pool1, pool2, pool3])
 
 # 완전 연결층
+hidden = Dense(128, activation='relu')(concat)
+dropout_hidden = Dropout(rate=dropout_prob)(hidden)
+logits = Dense(5, name='logits')(dropout_hidden)
+predictions = Dense(5, activation='softmax')(logits)
+
+# 모델 생성
+model = Model(inputs=input_layer, outputs=predictions)
+
+# 모델 요약
+# model.summary()
+
+# 모델 컴파일
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+
+# 모델 학습
+model.fit(train_ds, epochs=EPOCH)
+
+# 모델 평가
+loss, accuracy = model.evaluate(test_ds)
+print(f'loss: {loss}, accuracy: {accuracy}')
+
+# 모델 저장
+model.save(os.path.join(root_dir, 'model', 'intent', 'intent_model.keras'))

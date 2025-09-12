@@ -31,4 +31,22 @@ class IntenModel:
 
   # 의도 클래스 예측
   def predict_class(self, query):
-    pass
+    # 입력값 문자열 처리
+    if isinstance(query, list):
+      query = " ".join(map(str, query))
+    query = str(query) # 테스트 시 리스트 형태는 오류가 난다. 따라서 문자열로 반환해 준다
+
+    # 디버깅 출력
+    # print('처리된 질문: ', query)
+    # print('질문 타입: ', type(query))
+
+    # 형태소 분석: [('처리된', 'Verb'), ("질문", 'Noun')]
+    pos = self.p.pos(query)
+
+    # print(pos)
+
+    # 불용어 제거
+
+    # 패딩 처리
+
+    # 입력한 문장 예측
