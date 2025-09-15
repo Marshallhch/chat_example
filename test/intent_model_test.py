@@ -28,7 +28,16 @@ p = Preprocess(word2index_dic=os.path.join(root_dir, 'train_tools', 'dict', 'cha
 intent = IntenModel(model_name=os.path.join(root_dir, 'model', 'intent', 'intent_model.keras'), preprocess=p, custom_objects=custom_objects)
 
 # 테스트 질문
-query = '내일 오전 10시에 탕수육 주문하고 싶어요.'
+# query = '내일 오전 10시에 탕수육 주문하고 싶어요.'
+query = '바보 멍청이'
+# query = '안녕!'
 
 # 의도 클래스 예측
 predict = intent.predict_class(query)
+
+# 의도 레이블
+predict_label = intent.labels[predict]
+
+print('질문: ', query)
+print('의도 클래스 예측: ', predict)
+print('의도 레이블 예측: ', predict_label)

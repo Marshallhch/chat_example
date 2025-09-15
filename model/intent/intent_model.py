@@ -46,7 +46,13 @@ class IntenModel:
     # print(pos)
 
     # 불용어 제거
+    keywords = self.p.get_keywords(pos, without_tag=True) # ('타입', 'Noun') -> ['타입']
+    sequences = [self.p.get_wordidx_sentence(keywords)] # ['타입'] -> [117]
 
     # 패딩 처리
+    padded_seqs = preprocessing.sequence.pad_sequences(sequences, maxlen=15, padding='post')
 
     # 입력한 문장 예측
+    predict = self.model.predict(padded_seqs)
+    predict_class = tf.math.argmax(predict, axis=1)
+    return predict_class.numpy()[0]
