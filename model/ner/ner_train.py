@@ -112,42 +112,53 @@ y_test = tf.keras.utils.to_categorical(y_test, num_classes=tag_size)
 
 # print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
 
-# 훈련(BI_LSTM) 모듈 정의
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Embedding, Dropout, Bidirectional
-from tensorflow.keras.optimizers import Adam
+# # 훈련(BI_LSTM) 모듈 정의
+# from tensorflow.keras.models import Sequential
+# from tensorflow.keras.layers import LSTM, Dense, Embedding, Dropout, Bidirectional
+# from tensorflow.keras.optimizers import Adam
 
-# 모델 정의
-model = Sequential()
-model.add(Embedding(input_dim=vocab_size, output_dim=30, input_length=max_len))
-model.add(Bidirectional(LSTM(200, return_sequences=True))) # return_sequences=True - 각 타임 스탭 마다의 출력을 반환
-model.add(Dropout(0.5))
-model.add(Dense(tag_size, activation='softmax'))
+# # 모델 정의
+# model = Sequential()
+# model.add(Embedding(input_dim=vocab_size, output_dim=30, input_length=max_len))
+# model.add(Bidirectional(LSTM(200, return_sequences=True))) # return_sequences=True - 각 타임 스탭 마다의 출력을 반환
+# model.add(Dropout(0.5))
+# model.add(Dense(tag_size, activation='softmax'))
 
-# model.summary()
+# # model.summary()
 
-# 모델 컴파일
-model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.01), metrics=['accuracy'])
+# # 모델 컴파일
+# model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.01), metrics=['accuracy'])
 
-# 모델 학습 및 평가
-model.fit(x_train, y_train, batch_size=20, epochs=10, validation_split=0.2)
-print('평가 결과: ', model.evaluate(x_test, y_test)[1])
+# # 모델 학습 및 평가
+# model.fit(x_train, y_train, batch_size=20, epochs=10, validation_split=0.2)
+# print('평가 결과: ', model.evaluate(x_test, y_test)[1])
 
-# 모델 저장
-model.save(os.path.join(root_dir, 'model', 'ner', 'ner_model.keras'))
+# # 모델 저장
+# model.save(os.path.join(root_dir, 'model', 'ner', 'ner_model.keras'))
 
-# # F1 스코어 측정을 위하 모듈
-# from tensorflow.keras.models import load_model
-# from seqeval.metrics import f1_score, classification_report
+# F1 스코어 측정을 위하 모듈
+from tensorflow.keras.models import load_model
+from seqeval.metrics import f1_score, classification_report
 
-# # 모델 로드
-# model = load_model(os.path.join(root_dir, 'model', 'ner', 'ner_model.keras'))
+# 모델 로드
+model = load_model(os.path.join(root_dir, 'model', 'ner', 'ner_model.keras'))
 
-# # 시퀀스를 NER 태그로 변환하는 함수
-# def sequendce_to_tag(sequences): # 에측값을 index_to_ner를 사용해 태그 정보로 변경
-#   result = []
-#   for sequence in sequences: # 전체 시퀀스로부터 시퀀스를 하나씩 순회
-#     temp = []
-#     for pred in sequence: # 시퀀스로부터 예측 값을 하나씩 추출
-#       pred_index = np.argmax(pred) # [0, 0, 1, 0, 0] - 가장 큰 값 1의 인덱스 2 저장
-#       temp.append(index_to_ner[pred_index])
+# 시퀀스를 NER 태그로 변환하는 함수
+def sequendce_to_tag(sequences): # 에측값을 index_to_ner를 사용해 태그 정보로 변경
+  result = []
+  for sequence in sequences: # 전체 시퀀스로부터 시퀀스를 하나씩 순회
+    temp = []
+    for pred in sequence: # 시퀀스로부터 예측 값을 하나씩 추출
+      pred_index = np.argmax(pred) # [0, 0, 1, 0, 0] - 가장 큰 값 1의 인덱스 2 저장
+      temp.append(index_to_ner[pred_index].replace("PAD", "0"))
+    result.append(temp)
+  return result
+
+# 테스트 데이터 NER 예측
+y_predicted = model.predict(x_test)
+pred_tags = sequendce_to_tag(y_predicted) # 예측된 NER
+test_tags = sequendce_to_tag(y_test) # 실제 NER
+
+# 평가 결과 출력
+print(classification_report(test_tags, pred_tags))
+print('f1 스코어: ', f1_score(test_tags, pred_tags))
