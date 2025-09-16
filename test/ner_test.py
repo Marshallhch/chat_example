@@ -3,15 +3,18 @@ import os
 import sys
 from pathlib import Path
 
-if 'JAVA_HOME' not in os.environ:
-  os.environ["JAVA_HOME"] = JAVA_HOME
+# if 'JAVA_HOME' not in os.environ:
+#   os.environ["JAVA_HOME"] = JAVA_HOME
 
-# 프로젝트 루트 디렉토리를 파이썬 경로에 추가
-current_dir = Path(__file__).resolve().parent 
-root_dir = current_dir.parent
-sys.path.append(str(root_dir))
+# # 프로젝트 루트 디렉토리를 파이썬 경로에 추가
+# current_dir = Path(__file__).resolve().parent 
+# root_dir = current_dir.parent
+# sys.path.append(str(root_dir))
 
 from config.GlobalParams import * 
+root_dir = init_environment(__file__, up_levels=2)
+
+# print(root_dir)
 
 # 전처리 클래스
 from utils.preprocess import Preprocess

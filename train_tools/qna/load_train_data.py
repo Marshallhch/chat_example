@@ -8,6 +8,11 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))) 
 from config.GlobalParams import * # Global Params 내부에 지정된 값 가져온다
 
+# from config.GlobalParams import * 
+# root_dir = init_environment(__file__, up_levels=3)
+
+# # print(root_dir)
+
 # 기존 학습 데이터 초기화
 def all_clear_train_data(db):
   sql = "DELETE FROM chatbot_train_han"

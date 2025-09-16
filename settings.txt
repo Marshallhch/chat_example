@@ -29,3 +29,7 @@ pip install seqeval
 - fast api 필요 패키지
 pip install uvicorn
 pip install fastapi
+
+- import를 위한 실행 명령
+-m: Module - 파일 경로가 아닌 패키지.모듈 이름으로 접근. sys.path에서 해당 모듈을 찾아 패키지 컨텍스트로 실행
+python -m dir.file

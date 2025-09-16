@@ -4,15 +4,18 @@ from pathlib import Path
 
 import tensorflow as tf
 
-if 'JAVA_HOME' not in os.environ:
-  os.environ["JAVA_HOME"] = JAVA_HOME
+# if 'JAVA_HOME' not in os.environ:
+#   os.environ["JAVA_HOME"] = JAVA_HOME
 
-# 프로젝트 루트 디렉토리를 파이썬 경로에 추가
-current_dir = Path(__file__).resolve().parent 
-root_dir = current_dir.parent
-sys.path.append(str(root_dir))
+# # 프로젝트 루트 디렉토리를 파이썬 경로에 추가
+# current_dir = Path(__file__).resolve().parent 
+# root_dir = current_dir.parent
+# sys.path.append(str(root_dir))
 
 from config.GlobalParams import * 
+root_dir = init_environment(__file__, up_levels=2)
+
+print(root_dir)
 
 # 커스텀 모듈
 from utils.preprocess import Preprocess
@@ -28,8 +31,8 @@ p = Preprocess(word2index_dic=os.path.join(root_dir, 'train_tools', 'dict', 'cha
 intent = IntenModel(model_name=os.path.join(root_dir, 'model', 'intent', 'intent_model.keras'), preprocess=p, custom_objects=custom_objects)
 
 # 테스트 질문
-# query = '내일 오전 10시에 탕수육 주문하고 싶어요.'
-query = '바보 멍청이'
+query = '내일 오전 10시에 탕수육 주문하고 싶어요.'
+# query = '바보 멍청이'
 # query = '안녕!'
 
 # 의도 클래스 예측
