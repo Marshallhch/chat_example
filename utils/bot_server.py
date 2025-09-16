@@ -24,7 +24,7 @@ class BotServer:
     socket.SOCK_STREAM: 연결 지향 소켓
     """
     self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    self.sock.bind('0.0.0.0', int(self.port))
+    self.sock.bind(('0.0.0.0', int(self.port)))
     self.sock.listen(int(self.listen))
 
   # 크라이언트 대기

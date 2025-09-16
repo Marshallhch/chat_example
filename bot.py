@@ -115,4 +115,18 @@ def to_client(conn, addr):
     conn.close()
 
 if __name__ == '__main__':
-  pass
+  # 서버 동작
+  port = 5050
+  listen = 100 # 최대 연결 수
+  bot = BotServer(port, listen)
+  bot.create_sock() # 소캣 생성
+  print('봇 서버 실행 완료!')
+
+  # 무한루프를 돌면서 챗봇 클라이언트 연결을 기다린다.
+	# 클라이언트 서버 요청이 서버에서 수락되는 즉시 챗봇 서비스 요청을 처리하는 스레드 생성
+	# 생성되는 스레드는 to_client() 함수를 호출하여 서비스 요청 처리
+	# 각 스레드에서 독립적인 데이터베이스 연결을 생성합니다.
+  while True:
+    conn, addr = bot.ready_for_client() # 클라이언트 대기
+    client = threading.Thread(target=to_client, args=(conn, addr))
+    client.start() # 스레드 시작

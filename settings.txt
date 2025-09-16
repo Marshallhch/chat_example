@@ -27,6 +27,7 @@ pip install scikit-learn
 pip install seqeval
 
 - fast api 필요 패키지
+pip install pydantic
 pip install uvicorn
 pip install fastapi
 
